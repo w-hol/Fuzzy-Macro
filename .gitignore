@@ -28,3 +28,6 @@ backups/
 smoke_hourly_report.py
 .vscode/
 *.pt
+
+python/
+venv/
