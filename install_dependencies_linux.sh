@@ -108,6 +108,7 @@ install_pip_package "pygetwindow"
 install_pip_package "requests"
 install_pip_package "aiohttp==3.10.5"
 install_pip_package "pynput"
+install_pip_package "tkinter"
 
 # Fix html2image
 "$VENV_PATH/bin/python" << "EOF"
