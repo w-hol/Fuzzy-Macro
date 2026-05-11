@@ -60,6 +60,14 @@ class AppManager:
             subprocess.Popen(["xdg-open", deeplink])
         except Exception as e:
             print(f"Failed to open deeplink: {e}")
+    
+    def openApp(self, app="Sober"):
+        try:
+            subprocess.Popen(["flatpak", "run", "org.vinegarhq.Sober"])
+            return True
+        except Exception as e:
+            print(f"Failed to open app: {e}")
+            return False
             
 # Single instance
 manager = AppManager()
@@ -73,4 +81,4 @@ getWindowSize = manager.getWindowSize
 maximiseAppWindow = manager.maximiseAppWindow
 setAppFullscreen = manager.setAppFullscreen
 openDeeplink = manager.openDeeplink
-openApp = lambda app: False
+openApp = manager.openApp
