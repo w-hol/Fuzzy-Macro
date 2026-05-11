@@ -3276,7 +3276,7 @@ if __name__ == "__main__":
             print(f"Macro process exited{extra}")
             logger.webhook("","Macro Crashed{0}".format(extra), "red", "screen", ping_category="ping_critical_errors")
             macroProc.join()
-            appManager.openApp("Sober")
+            # appManager.openApp("Sober")
             keyboardModule.releaseMovement()
             mouse.mouseUp()
             # restart macro process
