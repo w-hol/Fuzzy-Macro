@@ -1,46 +1,59 @@
 import subprocess
 
 class AppManager:
-    def isAppOpen(self, app="sober"):
+    def isAppOpen(self, app="Sober"):
         try:
-            return subprocess.call(["pgrep", "-f", app], stdout=subprocess.DEVNULL) == 0
+            # Check if flatpak lists it as running
+            out = subprocess.check_output(["flatpak", "ps"], stderr=subprocess.DEVNULL).decode()
+            return "org.vinegarhq.Sober" in out
         except:
             return False
 
-    def isAppFocused(self, app="sober"):
+    def isAppFocused(self, app="Sober"):
         try:
+            # Diagnostic showed window name is exactly "Sober"
             active_window_id = subprocess.check_output(["xdotool", "getactivewindow"], stderr=subprocess.DEVNULL).decode().strip()
-            active_window_name = subprocess.check_output(["xdotool", "getwindowname", active_window_id], stderr=subprocess.DEVNULL).decode().lower()
-            return app.lower() in active_window_name
+            active_window_name = subprocess.check_output(["xdotool", "getwindowname", active_window_id], stderr=subprocess.DEVNULL).decode()
+            return app in active_window_name
         except:
             return False
 
-    def closeApp(self, app="sober"):
-        subprocess.call(["pkill", "-f", app], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-    def forceQuitApp(self, app="sober"):
-        subprocess.call(["pkill", "-9", "-f", app], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-    def getWindowSize(self, windowName="sober"):
+    def closeApp(self, app="Sober"):
         try:
+            subprocess.call(["flatpak", "kill", "org.vinegarhq.Sober"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except:
+            pass
+
+    def forceQuitApp(self, app="Sober"):
+        try:
+            subprocess.call(["flatpak", "kill", "org.vinegarhq.Sober"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except:
+            pass
+
+    def getWindowSize(self, windowName="Sober"):
+        try:
+            # wmctrl output includes extra metadata; we need to be flexible
             out = subprocess.check_output(["wmctrl", "-lG"], stderr=subprocess.DEVNULL).decode()
             for line in out.splitlines():
-                if windowName.lower() in line.lower():
+                if windowName in line:
                     parts = line.split()
+                    # wmctrl -lG format: ID, Desktop, X, Y, W, H, Machine, Title
+                    # Parts[2]=X, Parts[3]=Y, Parts[4]=W, Parts[5]=H
                     x, y, w, h = map(int, parts[2:6])
                     return x, y, w, h
         except:
             pass
         return 0, 0, 1920, 1080
+    
+    def maximiseAppWindow(self, app="Sober"):
+        # Use case-sensitive name from diagnostic
+        subprocess.call(["wmctrl", "-r", "Sober", "-b", "add,maximized_vert,maximized_horz"])
 
-    def maximiseAppWindow(self, app="sober"):
-        subprocess.call(["wmctrl", "-r", app, "-b", "add,maximized_vert,maximized_horz"])
-
-    def setAppFullscreen(self, app="sober", fullscreen=True):
+    def setAppFullscreen(self, app="Sober", fullscreen=True):
         if fullscreen:
-            subprocess.call(["wmctrl", "-r", app, "-b", "add,fullscreen"])
+            subprocess.call(["wmctrl", "-r", "Sober", "-b", "add,fullscreen"])
         else:
-            subprocess.call(["wmctrl", "-r", app, "-b", "remove,fullscreen"])
+            subprocess.call(["wmctrl", "-r", "Sober", "-b", "remove,fullscreen"])
 
 # Single instance
 manager = AppManager()
@@ -53,5 +66,4 @@ forceQuitApp = manager.forceQuitApp
 getWindowSize = manager.getWindowSize
 maximiseAppWindow = manager.maximiseAppWindow
 setAppFullscreen = manager.setAppFullscreen
-# Stub openApp as it's typically OS-specific
 openApp = lambda app: False
