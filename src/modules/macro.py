@@ -2185,7 +2185,7 @@ class macro:
                         else:
                             if is_share:
                                 type_val = qs.get('type', ['Server'])[0]
-                                deeplink = f"roblox://navigation/share_links?code={code_val}&type={type_val}"
+                                deeplink = f"roblox://experiences/start?placeId={placeId}&linkCode={code_val}"
                             else:
                                 deeplink += f"&linkCode={code_val}"
                     except Exception as e:
