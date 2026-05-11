@@ -2929,20 +2929,21 @@ if __name__ == "__main__":
     #use run.value to control the macro loop
 
     #check color profile
-    try:
-        colorProfileManager = DisplayColorProfile()
-        currentProfileColor = colorProfileManager.getCurrentColorProfile()
-        if not "sRGB" in currentProfileColor:
-            try:
-                if messageBox.msgBoxOkCancel(title="Incorrect Color Profile", text=f"You current display's color profile is {currentProfileColor} but sRGB is required for the macro.\nPress 'Ok' to change color profiles"):
-                    colorProfileManager.resetDisplayProfile()
-                    colorProfileManager.setCustomProfile("/System/Library/ColorSync/Profiles/sRGB Profile.icc")
-                    messageBox.msgBox(title="Color Profile Success", text="Successfully changed the current color profile to sRGB")
+    if sys.platform == 'darwin':
+        try:
+            colorProfileManager = DisplayColorProfile()
+            currentProfileColor = colorProfileManager.getCurrentColorProfile()
+            if not "sRGB" in currentProfileColor:
+                try:
+                    if messageBox.msgBoxOkCancel(title="Incorrect Color Profile", text=f"You current display's color profile is {currentProfileColor} but sRGB is required for the macro.\nPress 'Ok' to change color profiles"):
+                        colorProfileManager.resetDisplayProfile()
+                        colorProfileManager.setCustomProfile("/System/Library/ColorSync/Profiles/sRGB Profile.icc")
+                        messageBox.msgBox(title="Color Profile Success", text="Successfully changed the current color profile to sRGB")
 
-            except Exception as e:
-                messageBox.msgBox(title="Failed to change color profile", text=e)
-    except Exception as e:
-        pass
+                except Exception as e:
+                    messageBox.msgBox(title="Failed to change color profile", text=e)
+        except Exception as e:
+            pass
     
     # Check system permissions (macOS only)
     if sys.platform == 'darwin':
