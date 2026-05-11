@@ -732,7 +732,9 @@ class HourlyReportDrawer:
         return ' '.join(result)
         
     def getFont(self, weight, fontSize):
-        return ImageFont.truetype(f"./src/hourly_report/Inter/static/Inter_18pt-{weight.title()}.ttf", fontSize)
+        weight_map = {"Semibold": "SemiBold", "Bold": "Bold", "Regular": "Regular", "Medium": "Medium"}
+        w = weight_map.get(weight.title(), weight.title())
+        return ImageFont.truetype(f"./src/hourly_report/Inter/static/Inter_18pt-{w}.ttf", fontSize)
 
     def getGradientColorAtRatio(self, ratio, gradientSpec):
         #calculates the RGBA color from gradientSpec at a given vertical ratio (0=bottom, 1=top)
