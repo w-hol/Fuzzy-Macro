@@ -62,7 +62,9 @@ class AppManager:
     def openDeeplink(self, deeplink):
         try:
             # Use shell=True and quote the deeplink to match terminal behavior
-            subprocess.Popen(f"xdg-open '{deeplink}'", shell=True)
+            cmd = f"xdg-open '{deeplink}'"
+            print(f"Executing deeplink: {cmd}")
+            subprocess.Popen(cmd, shell=True)
         except Exception as e:
             print(f"Failed to open deeplink: {e}")
     
