@@ -2153,7 +2153,7 @@ class macro:
                     appManager.forceQuitApp("Sober")
                 except Exception:
                     appManager.closeApp("Sober")
-                appManager.openApp("Sober")
+                # appManager.openApp("Sober")
                 time.sleep(2)
                 deeplink = f"roblox://placeID={placeId}"
                 if joinPS:
