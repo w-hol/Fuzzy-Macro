@@ -6609,11 +6609,11 @@ class macro:
         self.moveMouseToDefault()
 
     def saveAFB(self, name):
-        return settingsManager.saveSettingFile(name, time.time(), "./data/user/AFB.txt")
+        return settingsManager.saveSettingFile(name, time.time(), "./src/data/user/AFB.txt")
 
     def resetAFBSessionTimings(self):
         try:
-            data = settingsManager.readSettingsFile("./data/user/AFB.txt")
+            data = settingsManager.readSettingsFile("./src/data/user/AFB.txt")
         except Exception:
             data = {}
 
@@ -6627,11 +6627,11 @@ class macro:
         data["AFB_dice_cd"] = now - rebuffCooldown
         data["AFB_glitter_cd"] = now - rebuffCooldown
 
-        settingsManager.saveDict("./data/user/AFB.txt", data)
+        settingsManager.saveDict("./src/data/user/AFB.txt", data)
     
     def getAFBtiming(self,name = None):
         for _ in range(3):
-            data = settingsManager.readSettingsFile("./data/user/AFB.txt")
+            data = settingsManager.readSettingsFile("./src/data/user/AFB.txt")
             if data: break #most likely another process is writing to the file
             time.sleep(0.1)
         if name is not None:
