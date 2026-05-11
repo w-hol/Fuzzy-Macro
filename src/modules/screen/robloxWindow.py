@@ -31,7 +31,7 @@ class RobloxWindowBounds:
 
         #calculate y offset and the actual roblox content bounds
         if setYOffset:
-            honeyImg = Image.open(f"./images/menu/honeybar-{self.display_type}.png").convert('RGBA')
+            honeyImg = Image.open(f"./src/images/menu/honeybar-{self.display_type}.png").convert('RGBA')
             res = self._detectContentYOffset(honeyImg)
             if res:
                 self.contentYOffset = max((res[1]//self.multi)-15-self.yOffset, 0)

@@ -1207,7 +1207,7 @@ class macro:
         )
 
     def isBesideEImage(self, name):
-        template = self.adjustImage("./images/menu",name)
+        template = self.adjustImage("./src/images/menu",name)
         return locateTransparentImageOnScreen(template, self.robloxWindow.mx+(self.robloxWindow.mw//2-200), self.robloxWindow.my+self.robloxWindow.yOffset+34, 400, 140, 0.75)
 
     def isMakeHoneyPrompt(self, log=False):
@@ -1217,7 +1217,7 @@ class macro:
 
     def getTiming(self,name = None):
         for _ in range(3):
-            data = settingsManager.readSettingsFile("./data/user/timings.txt")
+            data = settingsManager.readSettingsFile("./src/data/user/timings.txt")
             if data: break #most likely another process is writing to the file
             time.sleep(0.1)
         if name is not None:
@@ -1225,7 +1225,7 @@ class macro:
                 print(f"could not find timing for {name}, setting a new one")
                 # For bear quest cooldown keys, initialize to 0 instead of current time
                 if name in ("brown_bear_quest_cd", "black_bear_quest_cd"):
-                    settingsManager.saveSettingFile(name, 0, "./data/user/timings.txt")
+                    settingsManager.saveSettingFile(name, 0, "./src/data/user/timings.txt")
                     return 0
                 else:
                     self.saveTiming(name)
@@ -1234,7 +1234,7 @@ class macro:
         return data
     
     def saveTiming(self, name):
-        return settingsManager.saveSettingFile(name, time.time(), "./data/user/timings.txt")
+        return settingsManager.saveSettingFile(name, time.time(), "./src/data/user/timings.txt")
     #returns true if the cooldown is up
     #note that cooldown is in seconds
     def hasRespawned(self, name, cooldown, applyMobRespawnBonus = False, timing = None):
@@ -1340,7 +1340,7 @@ class macro:
     #if detect is set to true, the macro will check if the yes button is there
     #if detectOnly is set to true, the macro will not click 
     def clickYes(self, detect = False, detectOnly = False, clickOnce=False):
-        yesImg = self.adjustImage("./images/menu", "yes")
+        yesImg = self.adjustImage("./src/images/menu", "yes")
         x = self.robloxWindow.mx+self.robloxWindow.mw//2-270
         y = self.robloxWindow.my+self.robloxWindow.mh//2-60
         time.sleep(0.4)
@@ -1434,7 +1434,7 @@ class macro:
                 mouse.click()
                 time.sleep(0.05)
 
-        outDir = os.path.join("./data/user/inventory_screenshots", datetime.now().strftime("%Y%m%d_%H%M%S"))
+        outDir = os.path.join("./src/data/user/inventory_screenshots", datetime.now().strftime("%Y%m%d_%H%M%S"))
         os.makedirs(outDir, exist_ok=True)
 
         savedPaths = []
@@ -1498,7 +1498,7 @@ class macro:
                     prevHash = hash
         #for retina, just a regular image search
         #for built-in, a transparency search
-        itemImg = self.adjustImage("./images/inventory/old", itemName)
+        itemImg = self.adjustImage("./src/images/inventory/old", itemName)
         #itemImg = cv2.cvtColor(itemImg, cv2.COLOR_RGB2GRAY)
 
         itemOCRName = itemName.lower().replace("planter", "") #the name of the item used to check with the ocr to verify its correct
@@ -1783,20 +1783,20 @@ class macro:
             #mouse.teleport(self.robloxWindow.mw/(self.xsm*4.11)+40,(self.robloxWindow.mh/(9*self.ysm))+yOffset)
             self.canDetectNight = False
             st = time.time()
-            closeImg = self.adjustImage("./images/menu", "close") #sticker printer
+            closeImg = self.adjustImage("./src/images/menu", "close") #sticker printer
             print(f"adjusted sticker printer image: {time.time()-st}")
             if locateImageOnScreen(closeImg, self.robloxWindow.mx+(self.robloxWindow.mw/4), self.robloxWindow.my+(100), self.robloxWindow.mw/4, self.robloxWindow.mh/3.5, 0.7):
                 self.keyboard.press("e")
             print(f"check sticker printer popup: {time.time()-st}")
             
-            mmImg = self.adjustImage("./images/menu", "mmopen") #memory match
+            mmImg = self.adjustImage("./src/images/menu", "mmopen") #memory match
             if locateImageOnScreen(mmImg, self.robloxWindow.mx+(self.robloxWindow.mw/4), self.robloxWindow.my+(self.robloxWindow.mh/4), self.robloxWindow.mw/4, self.robloxWindow.mh/3.5, 0.8):
                 self.canDetectNight = False
                 self.memoryMatch.solveMemoryMatch(self.latestMM)
                 self.canDetectNight = True
             print(f"checked memory match popup: {time.time()-st}")
 
-            blenderImg = self.adjustImage("./images/menu", "blenderclose") #blender
+            blenderImg = self.adjustImage("./src/images/menu", "blenderclose") #blender
             if locateImageOnScreen(blenderImg, self.robloxWindow.mx+(self.robloxWindow.mw/4), self.robloxWindow.my+(self.robloxWindow.mh/5), self.robloxWindow.mw/7, self.robloxWindow.mh/4, 0.8):
                 self.closeBlenderGUI()
             print(f"checked blender popup: {time.time()-st}")
@@ -1804,7 +1804,7 @@ class macro:
             self.clickdialog(mustFindDialog=True)
             print(f"checked dialog: {time.time()-st}")
 
-            performanceStatsImg = self.adjustImage("./images/menu", "performancestats")
+            performanceStatsImg = self.adjustImage("./src/images/menu", "performancestats")
             if locateTransparentImageOnScreen(performanceStatsImg, self.robloxWindow.mx, self.robloxWindow.my, self.robloxWindow.mw/3.5, 70, 0.7):
                 if sys.platform == "darwin":
                     '''
@@ -1829,7 +1829,7 @@ class macro:
                 time.sleep(0.2)
                 mouse.click()
 
-            noImg = self.adjustImage("./images/menu", "no") #yes/no popup
+            noImg = self.adjustImage("./src/images/menu", "no") #yes/no popup
             x = self.robloxWindow.mx + self.robloxWindow.mw/2-300
             y = self.robloxWindow.my
             res = locateImageOnScreen(noImg, x, y, 650, self.robloxWindow.mh, 0.8)
@@ -1843,7 +1843,7 @@ class macro:
                 time.sleep(0.1)
                 mouse.click()
 
-            stickerBookImg = self.adjustImage("./images/menu", "stickerbookclose") #sticker book
+            stickerBookImg = self.adjustImage("./src/images/menu", "stickerbookclose") #sticker book
             x = self.robloxWindow.mx+250
             y = self.robloxWindow.my+110
             res = locateImageOnScreen(stickerBookImg, x, y, 100, 80, 0.8)
@@ -1856,7 +1856,7 @@ class macro:
                 mouse.click()
             print(f"checked sticker book popup: {time.time()-st}")
 
-            # robloxMenu = self.adjustImage("./images/menu", "robloxmenu")
+            # robloxMenu = self.adjustImage("./src/images/menu", "robloxmenu")
             # if not locateImageOnScreen(robloxMenu, self.robloxWindow.mx, self.robloxWindow.my, 75, 60, 0.8):
             #     self.keyboard.press('esc')
             #     time.sleep(0.5)
@@ -1878,9 +1878,9 @@ class macro:
             self.moveMouseToDefault()
             
             if self.newUI:
-                emptyHealth = self.adjustImage("./images/menu", "emptyhealth_new")
+                emptyHealth = self.adjustImage("./src/images/menu", "emptyhealth_new")
             else:
-                emptyHealth = self.adjustImage("./images/menu", "emptyhealth")
+                emptyHealth = self.adjustImage("./src/images/menu", "emptyhealth")
             healthBar = False #check if the health bar appears when the player resets. For some reason, the empty health bar doesnt always appear
             st = time.time()
             #wait for empty health bar to appear
@@ -2220,10 +2220,10 @@ class macro:
             #wait for bss to load
             #if sprinkler image is found, bss is loaded
             #max 80s of waiting
-            sprinklerImg = self.adjustImage("./images/menu", "sprinkler")
+            sprinklerImg = self.adjustImage("./src/images/menu", "sprinkler")
             loadStartTime = time.time()
-            signUpImage = self.adjustImage("./images/menu", "signup")
-            robloxHomeImage = self.adjustImage("./images/menu", "robloxhome")
+            signUpImage = self.adjustImage("./src/images/menu", "signup")
+            robloxHomeImage = self.adjustImage("./src/images/menu", "robloxhome")
             # prepare rejoin color-based detection
             try:
                 sample_colors = get_sample_colors()
@@ -2520,7 +2520,7 @@ class macro:
         return False
     
     def blueTextImageSearch(self, text, threshold=0.7):
-        target = self.adjustImage("./images/blue", text)
+        target = self.adjustImage("./src/images/blue", text)
         return locateImageOnScreen(target, self.robloxWindow.mx+(self.robloxWindow.mw*3/4), self.robloxWindow.my+(self.robloxWindow.mh*3/5), self.robloxWindow.mw/4, self.robloxWindow.mh-self.robloxWindow.mh*3/5, threshold)
     #background thread for gather
     #check if mobs have been killed and reset their timings
@@ -3077,7 +3077,7 @@ class macro:
 
     #returns the coordinates of the keep old text
     def keepOldCheck(self):
-        noImg = self.adjustImage("./images/menu", "keep") #yes/no popup
+        noImg = self.adjustImage("./src/images/menu", "keep") #yes/no popup
         x = self.robloxWindow.mx + self.robloxWindow.mw/2-300
         y = self.robloxWindow.my
         res = locateImageOnScreen(noImg, x, y, 650, self.robloxWindow.mh, 0.8)
@@ -3289,7 +3289,7 @@ class macro:
         time.sleep(0.2)
         mouse.click()
         time.sleep(1)
-        confirmImg = self.adjustImage("./images/menu", "confirm")
+        confirmImg = self.adjustImage("./src/images/menu", "confirm")
         if not locateImageOnScreen(confirmImg, self.robloxWindow.mx+(self.robloxWindow.mw//2+150), self.robloxWindow.my+(4*self.robloxWindow.mh//10+160), 120, 60, 0.7):
             self.logger.webhook(f"", "Sticker printer on cooldown", "dark brown", "screen")
             self.keyboard.press("e")
@@ -3525,7 +3525,7 @@ class macro:
             if self.hasMobRespawned(m, field, timings[timingName]):
                 timings[timingName] = time.time()
                 self.hourlyReport.addHourlyStat("bugs", regularMobQuantitiesInFields[field][m])
-        settingsManager.saveDict("./data/user/timings.txt", timings)
+        settingsManager.saveDict("./src/data/user/timings.txt", timings)
 
     #background thread function to determine if player has defeated the mob
     #time limit of 20s
@@ -3811,7 +3811,7 @@ class macro:
             mouse.click()
 
         def replace():
-            replaceImg = self.adjustImage("./images/menu", "replace")
+            replaceImg = self.adjustImage("./src/images/menu", "replace")
             x = self.robloxWindow.mx + self.robloxWindow.mw/2-300
             y = self.robloxWindow.my
             res = locateImageOnScreen(replaceImg, x, y, 650, self.robloxWindow.mh, 0.8)
@@ -4390,7 +4390,7 @@ class macro:
             self.hourlyReport.addHourlyStat("misc_time", time.time()-st)
 
         def saveBlenderData():
-            with open("./data/user/blender.txt", "w") as f:
+            with open("./src/data/user/blender.txt", "w") as f:
                 f.write(str(blenderData))
             f.close()
             updateHourlyTime()
@@ -4648,7 +4648,7 @@ class macro:
             if stickerUsed: finalTime += 10
             self.logger.webhook("", f"Activated Sticker Stack, Buff Duration: {timedelta(seconds=finalTime)}", "bright green")
         else:
-            with open("./data/user/sticker_stack.txt", "r") as f: #get the cooldown from the prev detection
+            with open("./src/data/user/sticker_stack.txt", "r") as f: #get the cooldown from the prev detection
                 stickerStackCD = int(f.read())
             f.close()
             if stickerStackCD > 15*60: #make sure the time is valid
@@ -4657,13 +4657,13 @@ class macro:
                 finalTime = 60*60 #default to 1hr
             self.logger.webhook("", f"Activated Sticker Stack, Buff Duration: {timedelta(seconds=finalTime)} (Defaulted to 1hr)", "bright green")
         self.keyboard.press("e")
-        with open("./data/user/sticker_stack.txt", "w") as f:
+        with open("./src/data/user/sticker_stack.txt", "w") as f:
             f.write(str(finalTime))
         f.close()
         return True
     
     def backgroundOnce(self):
-        with open("./data/user/hotbar_timings.txt", "r") as f:
+        with open("./src/data/user/hotbar_timings.txt", "r") as f:
             hotbarSlotTimings = ast.literal_eval(f.read())
         f.close()
 
@@ -4702,7 +4702,7 @@ class macro:
                 time.sleep(0.4)
             #update the time pressed
             hotbarSlotTimings[i] = time.time()
-            with open("./data/user/hotbar_timings.txt", "w") as f:
+            with open("./src/data/user/hotbar_timings.txt", "w") as f:
                 f.write(str(hotbarSlotTimings))
             f.close()
     
@@ -4739,7 +4739,7 @@ class macro:
                 self.logger.hourlyReport("Hourly Report", "", "purple")
 
                 #add to history
-                with open("data/user/hourly_report_history.txt", "r") as f:
+                with open("./src/data/user/hourly_report_history.txt", "r") as f:
                     history = ast.literal_eval(f.read())
                 f.close()
 
@@ -4753,7 +4753,7 @@ class macro:
                     history.pop(-1)
                 history.insert(0,historyObj)
 
-                with open("data/user/hourly_report_history.txt", "w") as f:
+                with open("./src/data/user/hourly_report_history.txt", "w") as f:
                     f.write(str(history))
                 f.close()
 
@@ -5331,13 +5331,13 @@ class macro:
         primaryScales = [1.0, 1.2, 1.1, 0.9, 0.8, 0.7, 1.3]
 
         questGiverTemplates = []
-        questGiverImg = Image.open(f"./images/quest/{questGiver}-{self.robloxWindow.display_type}.png").convert('RGBA')
+        questGiverImg = Image.open(f"./src/images/quest/{questGiver}-{self.robloxWindow.display_type}.png").convert('RGBA')
         questGiverTemplates.extend(buildScaledTemplates(questGiverImg, primaryScales, self.robloxWindow.display_type))
 
         fallbackDisplayType = "built-in" if self.robloxWindow.display_type == "retina" else "retina"
         fallbackScales = primaryScales if fallbackDisplayType == "built-in" else [0.7]
         try:
-            fallbackImg = Image.open(f"./images/quest/{questGiver}-{fallbackDisplayType}.png").convert('RGBA')
+            fallbackImg = Image.open(f"./src/images/quest/{questGiver}-{fallbackDisplayType}.png").convert('RGBA')
             questGiverTemplates.extend(buildScaledTemplates(fallbackImg, fallbackScales, fallbackDisplayType))
         except Exception:
             pass
@@ -6493,7 +6493,7 @@ class macro:
 
     def clickdialog(self, mustFindDialog=False):
         # Find dialog image and compute a click/sample location
-        dialogImgRef = self.adjustImage("./images/menu", "dialog")
+        dialogImgRef = self.adjustImage("./src/images/menu", "dialog")
         x = self.robloxWindow.mw // 2
         y = int(self.robloxWindow.mh * 2 / 3)
         a = locateImageOnScreen(dialogImgRef, self.robloxWindow.mx + (x), self.robloxWindow.my + (y), 300, self.robloxWindow.mh // 3, 0.8 if mustFindDialog else 0.5)
@@ -6581,14 +6581,14 @@ class macro:
                 if submitQuest:
                     if questObjective is None:
                         self.saveTiming(timing_key)
-                        settingsManager.saveSettingFile(state_key, 1, "./data/user/timings.txt")
+                        settingsManager.saveSettingFile(state_key, 1, "./src/data/user/timings.txt")
                     else:
                         # A new quest appeared immediately after submitting - remain in state 0
-                        settingsManager.saveSettingFile(state_key, 0, "./data/user/timings.txt")
+                        settingsManager.saveSettingFile(state_key, 0, "./src/data/user/timings.txt")
                 else:
                     # When simply getting a new quest, ensure state is 0
                     if questObjective is not None:
-                        settingsManager.saveSettingFile(state_key, 0, "./data/user/timings.txt")
+                        settingsManager.saveSettingFile(state_key, 0, "./src/data/user/timings.txt")
             except Exception:
                 pass
         return questObjective
@@ -6613,7 +6613,7 @@ class macro:
 
         #interact with feed menu
         time.sleep(1)
-        feedButtonImg = self.adjustImage("./images/menu", "feed")
+        feedButtonImg = self.adjustImage("./src/images/menu", "feed")
         fx = self.robloxWindow.mx + (54*self.robloxWindow.mw)//100-300
         fy = self.robloxWindow.my + self.robloxWindow.yOffset + (46*self.robloxWindow.mh)//100-59
         fres = locateImageOnScreen(feedButtonImg, fx, fy, 300, 120, 0.75)
@@ -6643,11 +6643,11 @@ class macro:
         self.moveMouseToDefault()
 
     def saveAFB(self, name):
-        return settingsManager.saveSettingFile(name, time.time(), "./data/user/AFB.txt")
+        return settingsManager.saveSettingFile(name, time.time(), "./src/data/user/AFB.txt")
 
     def resetAFBSessionTimings(self):
         try:
-            data = settingsManager.readSettingsFile("./data/user/AFB.txt")
+            data = settingsManager.readSettingsFile("./src/data/user/AFB.txt")
         except Exception:
             data = {}
 
@@ -6661,11 +6661,11 @@ class macro:
         data["AFB_dice_cd"] = now - rebuffCooldown
         data["AFB_glitter_cd"] = now - rebuffCooldown
 
-        settingsManager.saveDict("./data/user/AFB.txt", data)
+        settingsManager.saveDict("./src/data/user/AFB.txt", data)
     
     def getAFBtiming(self,name = None):
         for _ in range(3):
-            data = settingsManager.readSettingsFile("./data/user/AFB.txt")
+            data = settingsManager.readSettingsFile("./src/data/user/AFB.txt")
             if data: break #most likely another process is writing to the file
             time.sleep(0.1)
         if name is not None:

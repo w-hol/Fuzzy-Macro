@@ -125,7 +125,7 @@ def locateImageOnScreen(target, x, y, w, h, threshold=0, scales=None, return_sca
 
     - `target` may be:
         * a numpy image (BGR/BGRA) already loaded, or
-        * a path string like "./images/menu/honeybar" or "./images/menu/honeybar.png".
+        * a path string like "./src/images/menu/honeybar" or "./src/images/menu/honeybar.png".
           When a path string is given, the loader will prefer display-specific assets
           (e.g. honeybar-retina.png) and cache reads/resizes.
     - `scales`: optional iterable of scale factors to try (e.g. [1.0, 2.0, 0.95, 1.05]).

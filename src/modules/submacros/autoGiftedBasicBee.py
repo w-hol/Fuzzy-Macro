@@ -188,7 +188,7 @@ class AutoGiftedBasicBeeRunner:
         self._templates = {
             "royal_jelly_pil": self._decode_template(self.ROYAL_JELLY_B64),
             "gifted_star_pil": self._decode_template(self.GIFTED_STAR_B64),
-            "yes_cv2": adjustImage("./images/menu", "yes", self._roblox_window.display_type),
+            "yes_cv2": adjustImage("./src/images/menu", "yes", self._roblox_window.display_type),
         }
         self._templates["royal_jelly_cv2"] = cv2.cvtColor(
             self._as_np(self._templates["royal_jelly_pil"]),

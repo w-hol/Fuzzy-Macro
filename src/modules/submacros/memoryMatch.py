@@ -43,7 +43,7 @@ class MemoryMatch:
     def __init__(self, robloxWindow: RobloxWindowBounds, debug: bool = False):
         self.robloxWindow = robloxWindow
         self.debug = debug
-        self.blank_tile_hash = imagehash.average_hash(Image.open("./images/menu/mmempty.png"))
+        self.blank_tile_hash = imagehash.average_hash(Image.open("./src/images/menu/mmempty.png"))
         # Buckets of seen tile hashes for the current memory match game.
         # Each entry is a tuple: (imagehash.ImageHash, [indices_where_seen])
         self.seen_buckets = []
@@ -237,7 +237,7 @@ class MemoryMatch:
 
     def _check_game_active(self) -> None:
         """Check if the memory match game is still active."""
-        mm_img = adjustImage("./images/menu", "mmopen", self.robloxWindow.display_type)
+        mm_img = adjustImage("./src/images/menu", "mmopen", self.robloxWindow.display_type)
         if not locateImageOnScreen(
             mm_img, 
             self.robloxWindow.mx + self.robloxWindow.mw / 4, 

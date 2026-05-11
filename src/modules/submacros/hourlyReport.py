@@ -147,7 +147,7 @@ class BuffDetector():
             templatePosition, transform, stackable = v
 
             #find the buff
-            buffTemplate = adjustImage("./images/buffs", buff, self.robloxWindow.display_type)
+            buffTemplate = adjustImage("./src/images/buffs", buff, self.robloxWindow.display_type)
             finalBuffValues = []
 
             for _ in range(3):
@@ -337,7 +337,7 @@ class BuffDetector():
 
         #find the buff
         screen = self.screenshotBuffArea()
-        buffTemplate = adjustImage("./images/buffs", nectar, self.robloxWindow.display_type)
+        buffTemplate = adjustImage("./src/images/buffs", nectar, self.robloxWindow.display_type)
         res = locateTransparentImage(buffTemplate, screen, 0.5) #get the best match first. At high nectar levels, it becomes hard to detect the nectar icon
         if not res: 
             return 0
@@ -525,7 +525,7 @@ class HourlyReport():
 
 
         #get history
-        with open("data/user/hourly_report_history.txt", "r") as f:
+        with open("./src/data/user/hourly_report_history.txt", "r") as f:
             historyData = ast.literal_eval(f.read())
         f.close()
         
@@ -634,7 +634,7 @@ class HourlyReport():
         self.saveHourlyReportData()
     
     def saveHourlyReportData(self):
-        with open("data/user/hourly_report_stats.pkl", "wb") as f:
+        with open("./src/data/user/hourly_report_stats.pkl", "wb") as f:
             pickle.dump({
                 "hourlyReportStats": self.hourlyReportStats,
                 "sessionReportStats": self.sessionReportStats,
@@ -647,7 +647,7 @@ class HourlyReport():
             }, f)
     
     def loadHourlyReportData(self):
-        with open("data/user/hourly_report_stats.pkl", "rb") as f:
+        with open("./src/data/user/hourly_report_stats.pkl", "rb") as f:
             data = pickle.load(f)
             self.hourlyReportStats = data["hourlyReportStats"]
             self.sessionReportStats = data.get("sessionReportStats", self._defaultSessionReportStats())
@@ -674,7 +674,7 @@ class HourlyReportDrawer:
             self.hour = 23
         else:
             self.hour -= 1
-        self.assetPath = "hourly_report/assets"
+        self.assetPath = "./src/hourly_report/assets"
 
     def transformXLabelTime(self, i, val):
         if i%10:
@@ -732,7 +732,9 @@ class HourlyReportDrawer:
         return ' '.join(result)
         
     def getFont(self, weight, fontSize):
-        return ImageFont.truetype(f"hourly_report/Inter/static/Inter_18pt-{weight.title()}.ttf", fontSize)
+        weight_map = {"Semibold": "SemiBold", "Bold": "Bold", "Regular": "Regular", "Medium": "Medium"}
+        w = weight_map.get(weight.title(), weight.title())
+        return ImageFont.truetype(f"./src/hourly_report/Inter/static/Inter_18pt-{w}.ttf", fontSize)
 
     def getGradientColorAtRatio(self, ratio, gradientSpec):
         #calculates the RGBA color from gradientSpec at a given vertical ratio (0=bottom, 1=top)
