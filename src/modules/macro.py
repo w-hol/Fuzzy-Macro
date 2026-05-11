@@ -7021,13 +7021,18 @@ class macro:
             hourlyReportBackgroundThread.start()
         
         #if roblox is not open, rejoin
-        if not appManager.openApp("Sober"):
-            self.rejoin()
+        if self.setdat.get("rejoin_method") != "deeplink":
+            if not appManager.openApp("Sober"):
+                self.rejoin()
+            else:
+                #toggle fullscreen
+                # if not self.isFullScreen():
+                #     self.toggleFullScreen()
+                self.startDetect()
         else:
-            #toggle fullscreen
-            # if not self.isFullScreen():
-            #     self.toggleFullScreen()
-            self.startDetect()
+            # If using deeplink, we expect the user/macro to trigger rejoin() explicitly later
+            # Or if we want to ensure it's open, just check it.
+            self.rejoin()
             self.setRobloxWindowInfo()
     
         if not benchmarkMSS():
