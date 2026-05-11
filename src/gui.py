@@ -13,7 +13,9 @@ import threading
 from modules.submacros.autoGiftedBasicBee import AutoGiftedBasicBeeRunner
 import modules.controls.keyboard as keyboardModule
 
-eel.init('webapp')
+# Set an absolute path to the webapp directory
+webapp_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'webapp')
+eel.init(webapp_path)
 run = None
 _recent_logs = []
 _tool_logger = None
