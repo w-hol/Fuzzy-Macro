@@ -2148,6 +2148,7 @@ class macro:
             #execute rejoin method
             if joinPS:
                 browserLink = psLink
+            print(f"DEBUG: Rejoin method is {rejoinMethod}")
             if rejoinMethod == "deeplink":
                 try:
                     appManager.forceQuitApp("Sober")
@@ -2156,6 +2157,7 @@ class macro:
                 # appManager.openApp("Sober")
                 time.sleep(2)
                 deeplink = f"roblox://experiences/start?placeId={placeId}"
+                print(f"DEBUG: Constructed deeplink: {deeplink}")
                 # https://github.com/bloxstraplabs/bloxstrap/wiki/A-deep-dive-on-how-the-Roblox-bootstrapper-works#protocoluri-handling
                 if joinPS:
                     # Parse the provided private server link robustly using url parsing
