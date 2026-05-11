@@ -582,11 +582,11 @@ def importPatterns(patterns):
 
 @eel.expose
 def clearManualPlanters():
-    settingsManager.clearFile("./src/data/user/manualplanters.txt")
+    settingsManager.clearFile("./data/user/manualplanters.txt")
 
 @eel.expose
 def getManualPlanterData():
-    with open("./src/data/user/manualplanters.txt", "r") as f:
+    with open("./data/user/manualplanters.txt", "r") as f:
         planterDataRaw = f.read()
     if planterDataRaw.strip():
         return ast.literal_eval(planterDataRaw)
@@ -686,7 +686,7 @@ def normalizeAutoPlanterData(data):
 @eel.expose
 def getAutoPlanterData():
     try:
-        with open("./src/data/user/auto_planters.json", "r") as f:
+        with open("./data/user/auto_planters.json", "r") as f:
             return normalizeAutoPlanterData(json.load(f))
     except Exception:
         return defaultAutoPlanterData()
@@ -694,7 +694,7 @@ def getAutoPlanterData():
 @eel.expose
 def clearAutoPlanters():
     data = defaultAutoPlanterData()
-    with open("./src/data/user/auto_planters.json", "w") as f:
+    with open("./data/user/auto_planters.json", "w") as f:
         json.dump(data, f, indent=3)
 
 
@@ -703,7 +703,7 @@ def setAutoPlanterGather(val):
     """Set the global 'gather' flag in data/user/auto_planters.json"""
     try:
         try:
-            with open("./src/data/user/auto_planters.json", "r") as f:
+            with open("./data/user/auto_planters.json", "r") as f:
                 current = normalizeAutoPlanterData(json.load(f))
         except Exception:
             current = None
@@ -713,7 +713,7 @@ def setAutoPlanterGather(val):
 
         current["gather"] = bool(val)
 
-        with open("./src/data/user/auto_planters.json", "w") as f:
+        with open("./data/user/auto_planters.json", "w") as f:
             json.dump(current, f, indent=3)
         return True
     except Exception:
@@ -723,7 +723,7 @@ def setAutoPlanterGather(val):
 def resetManualPlanterTimer(index):
     """Reset a specific manual planter timer by index (0-2)"""
     try:
-        with open("./src/data/user/manualplanters.txt", "r") as f:
+        with open("./data/user/manualplanters.txt", "r") as f:
             planterDataRaw = f.read()
         
         if not planterDataRaw.strip():
@@ -745,7 +745,7 @@ def resetManualPlanterTimer(index):
         if "harvestTimes" in planterData and len(planterData["harvestTimes"]) > index:
             planterData["harvestTimes"][index] = 0
         
-        with open("./src/data/user/manualplanters.txt", "w") as f:
+        with open("./data/user/manualplanters.txt", "w") as f:
             f.write(str(planterData))
         
         return True
@@ -757,7 +757,7 @@ def resetManualPlanterTimer(index):
 def resetAutoPlanterTimer(index):
     """Reset a specific auto planter timer by index (0-2)"""
     try:
-        with open("./src/data/user/auto_planters.json", "r") as f:
+        with open("./data/user/auto_planters.json", "r") as f:
             data = normalizeAutoPlanterData(json.load(f))
         
         # Check if index is valid
@@ -767,7 +767,7 @@ def resetAutoPlanterTimer(index):
         # Clear the specific planter
         data["planters"][index] = emptyAutoPlanterSlot()
         
-        with open("./src/data/user/auto_planters.json", "w") as f:
+        with open("./data/user/auto_planters.json", "w") as f:
             json.dump(data, f, indent=3)
         
         return True
