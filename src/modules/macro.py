@@ -1214,7 +1214,7 @@ class macro:
 
     def getTiming(self,name = None):
         for _ in range(3):
-            data = settingsManager.readSettingsFile("./data/user/timings.txt")
+            data = settingsManager.readSettingsFile("./src/data/user/timings.txt")
             if data: break #most likely another process is writing to the file
             time.sleep(0.1)
         if name is not None:
@@ -1222,7 +1222,7 @@ class macro:
                 print(f"could not find timing for {name}, setting a new one")
                 # For bear quest cooldown keys, initialize to 0 instead of current time
                 if name in ("brown_bear_quest_cd", "black_bear_quest_cd"):
-                    settingsManager.saveSettingFile(name, 0, "./data/user/timings.txt")
+                    settingsManager.saveSettingFile(name, 0, "./src/data/user/timings.txt")
                     return 0
                 else:
                     self.saveTiming(name)
@@ -1231,7 +1231,7 @@ class macro:
         return data
     
     def saveTiming(self, name):
-        return settingsManager.saveSettingFile(name, time.time(), "./data/user/timings.txt")
+        return settingsManager.saveSettingFile(name, time.time(), "./src/data/user/timings.txt")
     #returns true if the cooldown is up
     #note that cooldown is in seconds
     def hasRespawned(self, name, cooldown, applyMobRespawnBonus = False, timing = None):
@@ -1431,7 +1431,7 @@ class macro:
                 mouse.click()
                 time.sleep(0.05)
 
-        outDir = os.path.join("./data/user/inventory_screenshots", datetime.now().strftime("%Y%m%d_%H%M%S"))
+        outDir = os.path.join("./src/data/user/inventory_screenshots", datetime.now().strftime("%Y%m%d_%H%M%S"))
         os.makedirs(outDir, exist_ok=True)
 
         savedPaths = []
@@ -3491,7 +3491,7 @@ class macro:
             if self.hasMobRespawned(m, field, timings[timingName]):
                 timings[timingName] = time.time()
                 self.hourlyReport.addHourlyStat("bugs", regularMobQuantitiesInFields[field][m])
-        settingsManager.saveDict("./data/user/timings.txt", timings)
+        settingsManager.saveDict("./src/data/user/timings.txt", timings)
 
     #background thread function to determine if player has defeated the mob
     #time limit of 20s
@@ -4356,7 +4356,7 @@ class macro:
             self.hourlyReport.addHourlyStat("misc_time", time.time()-st)
 
         def saveBlenderData():
-            with open("./data/user/blender.txt", "w") as f:
+            with open("./src/data/user/blender.txt", "w") as f:
                 f.write(str(blenderData))
             f.close()
             updateHourlyTime()
@@ -4614,7 +4614,7 @@ class macro:
             if stickerUsed: finalTime += 10
             self.logger.webhook("", f"Activated Sticker Stack, Buff Duration: {timedelta(seconds=finalTime)}", "bright green")
         else:
-            with open("./data/user/sticker_stack.txt", "r") as f: #get the cooldown from the prev detection
+            with open("./src/data/user/sticker_stack.txt", "r") as f: #get the cooldown from the prev detection
                 stickerStackCD = int(f.read())
             f.close()
             if stickerStackCD > 15*60: #make sure the time is valid
@@ -4623,13 +4623,13 @@ class macro:
                 finalTime = 60*60 #default to 1hr
             self.logger.webhook("", f"Activated Sticker Stack, Buff Duration: {timedelta(seconds=finalTime)} (Defaulted to 1hr)", "bright green")
         self.keyboard.press("e")
-        with open("./data/user/sticker_stack.txt", "w") as f:
+        with open("./src/data/user/sticker_stack.txt", "w") as f:
             f.write(str(finalTime))
         f.close()
         return True
     
     def backgroundOnce(self):
-        with open("./data/user/hotbar_timings.txt", "r") as f:
+        with open("./src/data/user/hotbar_timings.txt", "r") as f:
             hotbarSlotTimings = ast.literal_eval(f.read())
         f.close()
 
@@ -4668,7 +4668,7 @@ class macro:
                 time.sleep(0.4)
             #update the time pressed
             hotbarSlotTimings[i] = time.time()
-            with open("./data/user/hotbar_timings.txt", "w") as f:
+            with open("./src/data/user/hotbar_timings.txt", "w") as f:
                 f.write(str(hotbarSlotTimings))
             f.close()
     
@@ -6547,14 +6547,14 @@ class macro:
                 if submitQuest:
                     if questObjective is None:
                         self.saveTiming(timing_key)
-                        settingsManager.saveSettingFile(state_key, 1, "./data/user/timings.txt")
+                        settingsManager.saveSettingFile(state_key, 1, "./src/data/user/timings.txt")
                     else:
                         # A new quest appeared immediately after submitting - remain in state 0
-                        settingsManager.saveSettingFile(state_key, 0, "./data/user/timings.txt")
+                        settingsManager.saveSettingFile(state_key, 0, "./src/data/user/timings.txt")
                 else:
                     # When simply getting a new quest, ensure state is 0
                     if questObjective is not None:
-                        settingsManager.saveSettingFile(state_key, 0, "./data/user/timings.txt")
+                        settingsManager.saveSettingFile(state_key, 0, "./src/data/user/timings.txt")
             except Exception:
                 pass
         return questObjective
