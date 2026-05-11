@@ -91,6 +91,32 @@ def _download_update_zip(zip_link, progress_callback, start_percent=35, end_perc
         req.close()
 
 
+def _refresh_updater(destination, progress_callback=None):
+    update_py_url = "https://raw.githubusercontent.com/Fuzzy-Team/Fuzzy-Macro/refs/heads/main/src/modules/misc/update.py"
+    headers = {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+    }
+    _report_update_progress(progress_callback, 5, "Refreshing updater")
+    response = requests.get(update_py_url, timeout=20, headers=headers)
+    response.raise_for_status()
+
+    target_update = os.path.join(destination, "src", "modules", "misc", "update.py")
+    os.makedirs(os.path.dirname(target_update), exist_ok=True)
+    tmp_path = target_update + ".tmp"
+    try:
+        with open(tmp_path, "w", encoding="utf-8") as fh:
+            fh.write(response.text)
+        os.replace(tmp_path, target_update)
+    finally:
+        try:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+        except Exception:
+            pass
+
+
 # Recursively copy from src to dst, overwriting files. Skip protected names.
 def _merge_overwrite(src, dst, protected_folders, protected_files):
     for root, dirs, files in os.walk(src):
@@ -156,11 +182,11 @@ def _create_backup(destination, backup_path, protected_folders, protected_files)
                     pass
 
 
-# Mark that a backup exists and should be deleted on next macro run
+# Mark that a backup exists and should be deleted after one full macro launch.
 def _mark_backup_pending(destination):
     try:
         with open(os.path.join(destination, ".backup_pending"), "w") as fh:
-            fh.write("1")
+            fh.write("defer_once")
     except Exception:
         pass
 
@@ -185,6 +211,18 @@ def delete_backup_if_pending(destination=None):
         backup = os.path.join(base, "backup_macro.zip")
         try:
             if os.path.exists(marker) or os.path.exists(backup):
+                if os.path.exists(marker):
+                    try:
+                        with open(marker, "r") as fh:
+                            marker_state = fh.read().strip()
+                    except Exception:
+                        marker_state = ""
+
+                    if marker_state == "defer_once":
+                        with open(marker, "w") as fh:
+                            fh.write("ready")
+                        break
+
                 prompt = "A backup from a previous update was found.\nDo you want to delete the backup now? (Recommended if the macro is working fine.)"
                 response = msgBoxOkCancel("Delete Backup?", prompt)
                 if response:
@@ -254,6 +292,7 @@ def update(t="main", update_channel="stable", progress_callback=None):
     # merge rules below so specific built-in patterns can be updated safely.
     protected_folders = [
         os.path.join("src", "data", "user"),
+        os.path.join("src", "data", "models"),
         os.path.join("settings", "profiles"),
         os.path.join("settings", "patterns"),
     ]
@@ -261,35 +300,8 @@ def update(t="main", update_channel="stable", progress_callback=None):
     pattern_overwrite_exceptions = PATTERN_OVERWRITE_EXCEPTIONS
     destination = os.getcwd().replace("/src", "")
 
-    # remote version URL and zip link
-    # Attempt to fetch the latest `update.py` from upstream and replace the
-    # local copy before performing the rest of the update. This allows bug
-    # fixes in the updater itself to take effect immediately for this run.
     try:
-        _report_update_progress(progress_callback, 5, "Refreshing updater")
-        update_py_url = "https://raw.githubusercontent.com/Fuzzy-Team/Fuzzy-Macro/refs/heads/main/src/modules/misc/update.py"
-        h = {
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-            "Pragma": "no-cache",
-            "Expires": "0",
-        }
-        r_up = requests.get(update_py_url, timeout=20, headers=h)
-        r_up.raise_for_status()
-        upd_code = r_up.text
-        target_update = os.path.join(destination, "src", "modules", "misc", "update.py")
-        target_dir = os.path.dirname(target_update)
-        os.makedirs(target_dir, exist_ok=True)
-        tmp_path = target_update + ".tmp"
-        try:
-            with open(tmp_path, "w", encoding="utf-8") as fh:
-                fh.write(upd_code)
-            os.replace(tmp_path, target_update)
-        except Exception:
-            try:
-                if os.path.exists(tmp_path):
-                    os.remove(tmp_path)
-            except Exception:
-                pass
+        _refresh_updater(destination, progress_callback)
     except Exception:
         # non-fatal: continue with current updater if fetch fails
         pass
@@ -408,6 +420,13 @@ def update(t="main", update_channel="stable", progress_callback=None):
         _report_update_progress(progress_callback, 100, "Update failed: could not apply files")
         msgBox("Update failed", "Error while applying update files.")
         return False
+
+    try:
+        _report_update_progress(progress_callback, 84, "Checking AI models")
+        from modules.misc.modelManager import ensure_supported_models
+        ensure_supported_models()
+    except Exception as e:
+        print(f"[models] Could not check/download AI models: {e}")
 
     # Merge patterns: combine files from extracted/settings/patterns with
     # existing settings/patterns in destination. We protected patterns above
@@ -539,12 +558,19 @@ def update_from_commit(commit_hash, progress_callback=None):
     msgBox("Update in progress", f"Updating to commit {commit_hash}... Do not close terminal")
     protected_folders = [
         os.path.join("src", "data", "user"),
+        os.path.join("src", "data", "models"),
         os.path.join("settings", "profiles"),
         os.path.join("settings", "patterns"),
     ]
     protected_files = [".git"]
     pattern_overwrite_exceptions = PATTERN_OVERWRITE_EXCEPTIONS
     destination = os.getcwd().replace("/src", "")
+
+    try:
+        _refresh_updater(destination, progress_callback)
+    except Exception:
+        # non-fatal: continue with current updater if fetch fails
+        pass
 
     remote_zip = f"https://github.com/Fuzzy-Team/Fuzzy-Macro/archive/{commit_hash}.zip"
     backup_path = os.path.join(destination, "backup_macro.zip")
@@ -592,6 +618,13 @@ def update_from_commit(commit_hash, progress_callback=None):
         _report_update_progress(progress_callback, 100, "Update failed: could not apply files")
         msgBox("Update failed", "Error while applying update files.")
         return False
+
+    try:
+        _report_update_progress(progress_callback, 84, "Checking AI models")
+        from modules.misc.modelManager import ensure_supported_models
+        ensure_supported_models()
+    except Exception as e:
+        print(f"[models] Could not check/download AI models: {e}")
 
     # merge patterns similar to update()
     try:
