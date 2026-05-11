@@ -46,7 +46,7 @@ from difflib import SequenceMatcher
 import fuzzywuzzy.process
 import fuzzywuzzy
 import traceback
-import pygetwindow as gw
+# import pygetwindow as gw
 from modules.submacros.hasteCompensation import HasteCompensationRevamped
 from modules import bitmap_matcher
 import json
@@ -329,7 +329,7 @@ quest_bear = ""
 quest_title = ""
 quest_info = []
 
-with open("./data/bss/quest_data.txt", "r") as f:
+with open("./src/data/bss/quest_data.txt", "r") as f:
     qdata = [x for x in f.read().split("\n") if x]
 
 for line in qdata:
@@ -360,7 +360,7 @@ nectarFields = {
   "invigorating": ["pepper", "mountain top", "clover", "cactus"]
 }
 allPlanters = ["paper", "ticket", "festive", "sticker", "plastic", "candy", "red_clay", "blue_clay", "tacky", "pesticide", "heat-treated", "hydroponic", "petal", "planter_of_plenty"]
-with open("./data/bss/auto_planter_ranking.json", "r") as f:
+with open("./src/data/bss/auto_planter_ranking.json", "r") as f:
     autoPlanterRankings = json.load(f)
 
 
@@ -1032,13 +1032,10 @@ class macro:
             self.nightDetectStreaks = 0
 
     def isFullScreen(self):
-        windows = gw.getAllTitles()
-        for win in windows:
-            if "roblox roblox" in win.lower():
-                x,y,w,h = gw.getWindowGeometry(win)
-                return x==0 and y==0 and w==self.robloxWindow.mw and h==self.robloxWindow.mh
-        #can't find the roblox window, most likely fullscreen? Assumes that it exists
-        return True
+        # We use appManager to check the Sober window size
+        x, y, w, h = appManager.getWindowSize("Sober")
+        return x == 0 and y == 0 and w == self.robloxWindow.mw and h == self.robloxWindow.mh
+
 
     def toggleFullScreen(self):
         self.keyboard.keyDown("command")

@@ -1,12 +1,12 @@
 from modules.screen.screenshot import mssScreenshot
 import pyautogui as pag
 import numpy as np
-from PIL import Image
-import os
+# from PIL import Image
+# import os
 import time
-import mss
-import mss.darwin
-mss.darwin.IMAGE_OPTIONS = 0
+# import mss
+# import mss.darwin
+# mss.darwin.IMAGE_OPTIONS = 0
 from modules.screen.screenData import getScreenData, scaleRegion, scaleX, scaleY
 import io
 
@@ -15,22 +15,23 @@ BASE_SCREEN_HEIGHT = 1800
 
 ocrLib = None
 useLangPref = True
-try:
-    from ocrmac import ocrmac #see if ocr mac is installed
-    ocrLib = "ocrmac"
-except:
+
+if ocrLib is None:
     try:
         from paddleocr import PaddleOCR
-        ocrP = PaddleOCR(lang='en', show_log = False, use_angle_cls=False)
+        ocrP = PaddleOCR(lang='en', show_log=False, use_angle_cls=False)
         print("Imported paddleocr")
         ocrLib = "paddleocr"
     except:
-        import easyocr
-        import ssl
-        ssl._create_default_https_context = ssl._create_unverified_context
-        print("Imported easyocr")
-        easyocrReader = easyocr.Reader(['en'])
-        ocrLib = "easyocr"
+        try:
+            import easyocr
+            import ssl
+            ssl._create_default_https_context = ssl._create_unverified_context
+            print("Imported easyocr")
+            easyocrReader = easyocr.Reader(['en'])
+            ocrLib = "easyocr"
+        except Exception as e:
+            print(f"Failed to import any OCR library: {e}")
 
 mw, mh = pag.size()
 screenInfo = getScreenData()
@@ -53,15 +54,7 @@ def paddleBounding(b):
     #convert all values to int and unpack
     x1,y1,x2,y2 = [int(x) for x in b]
     return ([x1,y1],[x2,y1],[x2,y2],[x1,y2])
-    
-def ocrMac_(img):
-    if useLangPref:
-        result = ocrmac.OCR(img,language_preference=['en-US']).recognize(px=True)
-    else:
-        result = ocrmac.OCR(img).recognize(px=True)
-    #convert it to the same format as paddleocr
-    #[ ([x1,y1],[x2,y1],[x2,y2],[x1,y2]), (text, confidence) ]
-    return [ [paddleBounding(x[2]),(x[0],x[1]) ] for x in result]
+
 
 def ocrPaddle(img):
     #img = np.asarray(img) 
@@ -161,17 +154,12 @@ def ocrRead(img):
     if out is None:
         return [[[""],["",0]]]
     return out
-    
-if ocrLib == "ocrmac":
-    ocrFunc = ocrMac_
-    try:
-        ocrFunc(mssScreenshot(1,1,10,10))
-    except Exception as e:
-        print(e)
-        print("Language Preferences for ocrmac is disabled")
-        useLangPref = False
-elif ocrLib == "paddleocr":
+
+if ocrLib == "paddleocr":
     ocrFunc = ocrPaddle
 elif ocrLib == "easyocr":
     ocrFunc = ocrEasy
-
+else:
+    # Fallback: return empty results if no OCR library is available
+    def ocrFunc(img):
+        return []

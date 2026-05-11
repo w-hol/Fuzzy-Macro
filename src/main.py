@@ -4,7 +4,7 @@ try:
     import requests
 except ModuleNotFoundError:
     try:
-        script = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "install_dependencies.command"))
+        script = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "install_dependencies_linux.sh"))
         if os.path.exists(script):
             subprocess.Popen(["/bin/bash", script])
         else:
@@ -49,7 +49,7 @@ try:
 	from modules.misc.ColorProfile import DisplayColorProfile
 except ModuleNotFoundError:
     try:
-        script = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "install_dependencies.command"))
+        script = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "install_dependencies_linux.sh"))
         if os.path.exists(script):
             subprocess.Popen(["/bin/bash", script])
         else:
