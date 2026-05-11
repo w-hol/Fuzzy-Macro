@@ -203,9 +203,9 @@ class AutoGiftedBasicBeeRunner:
         return np.array(img)
 
     def _activate_roblox(self):
-        if not appManager.isAppOpen("Roblox"):
+        if not appManager.isAppOpen("Sober"):
             raise RuntimeError("Roblox is not open.")
-        appManager.openApp("Roblox")
+        appManager.openApp("Sober")
         time.sleep(0.5)
         self._roblox_window = RobloxWindowBounds()
         self._roblox_window.setRobloxWindowBounds()

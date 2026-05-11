@@ -2620,11 +2620,11 @@ def discordBot(token, run, status, skipTask, recentLogs=None, pin_requests=None,
         try:
             if action == "both":
                 run.value = 0
-                closeApp("Roblox")
+                closeApp("Sober")
                 await interaction.response.send_message("Closing macro and Roblox...")
                 os.kill(os.getppid(), signal.SIGTERM)
             elif action == "roblox":
-                closeApp("Roblox")
+                closeApp("Sober")
                 await interaction.response.send_message("Closing Roblox...")
             elif action == "macro":
                 # stop the macro loop but keep the bot running

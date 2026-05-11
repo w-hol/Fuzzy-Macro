@@ -2007,7 +2007,7 @@ class macro:
     def cannon(self, fast = False, allowHiveResync = True):
         def detect_rejoin_mode_color():
             try:
-                if not appManager.isAppFocused("Roblox"):
+                if not appManager.isAppFocused("Sober"):
                     return None
                 percent_threshold = float(self.setdat.get("rejoin_color_percent", 0.7754))
                 color_tolerance = int(self.setdat.get("rejoin_color_tolerance", 40))
@@ -2150,10 +2150,10 @@ class macro:
                 browserLink = psLink
             if rejoinMethod == "deeplink":
                 try:
-                    appManager.forceCloseApp("Roblox")
+                    appManager.forceQuitApp("Sober")
                 except Exception:
-                    appManager.closeApp("Roblox")
-                appManager.openApp("Roblox")
+                    appManager.closeApp("Sober")
+                appManager.openApp("Sober")
                 time.sleep(2)
                 deeplink = f"roblox://placeID={placeId}"
                 if joinPS:
@@ -2224,7 +2224,7 @@ class macro:
             rejoinSuccess = True
             robloxOpenTime = 0
             while not locateImageOnScreen(sprinklerImg, self.robloxWindow.mx, self.robloxWindow.my+(self.robloxWindow.mh*3/4), self.robloxWindow.mw, self.robloxWindow.mh*1/4, 0.75) and time.time() - loadStartTime < 240:
-                if appManager.isAppOpen("roblox"):
+                if appManager.isAppOpen("Sober"):
                     robloxOpenTime = time.time()
                 if self.setdat["rejoin_method"] == "deeplink":
                     #check if the user is stuck on the sign up screen
@@ -2245,7 +2245,7 @@ class macro:
 
                 # Check for sustained dominant color (light/dark) that indicates a stuck screen.
                 try:
-                    if appManager.isAppFocused("Roblox"):
+                    if appManager.isAppFocused("Sober"):
                         matched = False
                         for col in sample_colors:
                             pct = percent_pixels_similar_to_color(self.robloxWindow.mx, self.robloxWindow.my, self.robloxWindow.mw, self.robloxWindow.mh, col, tolerance=color_tolerance)
@@ -2268,7 +2268,7 @@ class macro:
 
                     self.setRobloxWindowInfo(setYOffset=False)
 
-            appManager.openApp("Roblox")
+            appManager.openApp("Sober")
             if not rejoinSuccess:
                 continue
             #run fullscreen check
@@ -2294,7 +2294,7 @@ class macro:
                     else:
                         self.keyboard.keyUp("ctrl")
                     time.sleep(0.5)
-                appManager.openApp("Roblox")
+                appManager.openApp("Sober")
             
             self.startDetect()
             if not claimHive:
@@ -7010,7 +7010,7 @@ class macro:
             hourlyReportBackgroundThread.start()
         
         #if roblox is not open, rejoin
-        if not appManager.openApp("Roblox"):
+        if not appManager.openApp("Sober"):
             self.rejoin()
         else:
             #toggle fullscreen

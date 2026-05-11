@@ -3059,7 +3059,7 @@ if __name__ == "__main__":
             # Check for resume (transition from paused to running)
             if prevRunState == 6 and run.value == 2:
                 try:
-                    appManager.openApp("Roblox")
+                    appManager.openApp("Sober")
                 except Exception:
                     pass
                 logger.webhook("Macro Resumed", "Fuzzy Macro", "bright green")
@@ -3244,7 +3244,7 @@ if __name__ == "__main__":
                 macroProc.kill()
                 macroProc.join()
             logger.webhook("","Disconnected", "red", "screen", ping_category="ping_disconnects")
-            appManager.closeApp("Roblox")
+            appManager.closeApp("Sober")
             keyboardModule.releaseMovement()
             mouse.mouseUp()
             macroProc = multiprocessing.Process(target=macro, args=(status, logQueue, updateGUI, run, skipTask, presence), daemon=True)
@@ -3276,7 +3276,7 @@ if __name__ == "__main__":
             print(f"Macro process exited{extra}")
             logger.webhook("","Macro Crashed{0}".format(extra), "red", "screen", ping_category="ping_critical_errors")
             macroProc.join()
-            appManager.openApp("Roblox")
+            appManager.openApp("Sober")
             keyboardModule.releaseMovement()
             mouse.mouseUp()
             # restart macro process
@@ -3339,7 +3339,7 @@ if __name__ == "__main__":
         
         if run.value == 2 and time.time() > disconnectCooldownUntil:
             img = adjustImage("./src/images/menu", "disconnect", screenInfo["display_type"])
-            wmx, wmy, wmw, wmh = getWindowSize("roblox roblox")
+            wmx, wmy, wmw, wmh = getWindowSize("Sober")
             if locateImageOnScreen(img, wmx+wmw/3, wmy+wmh/2.8, wmw/2.3, wmh/5, 0.7):
                 print("disconnected")
                 run.value = 4

@@ -26,7 +26,7 @@ class RobloxWindowBounds:
         self.multi = 2 if self.isRetina else 1 #used for pixel calculation compatibility between retina and non-retina displays
     
     def setRobloxWindowBounds(self, setYOffset = True):
-        self.mx, self.my, self.mw, self.mh = getWindowSize("roblox roblox")
+        self.mx, self.my, self.mw, self.mh = getWindowSize("Sober")
 
         #calculate y offset and the actual roblox content bounds
         if setYOffset:
