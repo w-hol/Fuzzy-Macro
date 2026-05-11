@@ -4705,7 +4705,7 @@ class macro:
                 self.logger.hourlyReport("Hourly Report", "", "purple")
 
                 #add to history
-                with open("data/user/hourly_report_history.txt", "r") as f:
+                with open("./src/data/user/hourly_report_history.txt", "r") as f:
                     history = ast.literal_eval(f.read())
                 f.close()
 
@@ -4719,7 +4719,7 @@ class macro:
                     history.pop(-1)
                 history.insert(0,historyObj)
 
-                with open("data/user/hourly_report_history.txt", "w") as f:
+                with open("./src/data/user/hourly_report_history.txt", "w") as f:
                     f.write(str(history))
                 f.close()
 

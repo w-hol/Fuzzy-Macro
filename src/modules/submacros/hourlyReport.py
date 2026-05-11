@@ -525,7 +525,7 @@ class HourlyReport():
 
 
         #get history
-        with open("data/user/hourly_report_history.txt", "r") as f:
+        with open("./src/data/user/hourly_report_history.txt", "r") as f:
             historyData = ast.literal_eval(f.read())
         f.close()
         
@@ -634,7 +634,7 @@ class HourlyReport():
         self.saveHourlyReportData()
     
     def saveHourlyReportData(self):
-        with open("data/user/hourly_report_stats.pkl", "wb") as f:
+        with open("./src/data/user/hourly_report_stats.pkl", "wb") as f:
             pickle.dump({
                 "hourlyReportStats": self.hourlyReportStats,
                 "sessionReportStats": self.sessionReportStats,
@@ -647,7 +647,7 @@ class HourlyReport():
             }, f)
     
     def loadHourlyReportData(self):
-        with open("data/user/hourly_report_stats.pkl", "rb") as f:
+        with open("./src/data/user/hourly_report_stats.pkl", "rb") as f:
             data = pickle.load(f)
             self.hourlyReportStats = data["hourlyReportStats"]
             self.sessionReportStats = data.get("sessionReportStats", self._defaultSessionReportStats())
