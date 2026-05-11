@@ -55,6 +55,12 @@ class AppManager:
         else:
             subprocess.call(["wmctrl", "-r", "Sober", "-b", "remove,fullscreen"])
 
+    def openDeeplink(self, deeplink):
+        try:
+            subprocess.Popen(["xdg-open", deeplink])
+        except Exception as e:
+            print(f"Failed to open deeplink: {e}")
+            
 # Single instance
 manager = AppManager()
 
@@ -66,4 +72,5 @@ forceQuitApp = manager.forceQuitApp
 getWindowSize = manager.getWindowSize
 maximiseAppWindow = manager.maximiseAppWindow
 setAppFullscreen = manager.setAppFullscreen
+openDeeplink = manager.openDeeplink
 openApp = lambda app: False
