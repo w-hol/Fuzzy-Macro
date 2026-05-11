@@ -2155,7 +2155,8 @@ class macro:
                     appManager.closeApp("Sober")
                 # appManager.openApp("Sober")
                 time.sleep(2)
-                deeplink = f"roblox://placeID={placeId}"
+                deeplink = f"roblox://experiences/start?placeId={placeId}" 
+                # https://github.com/bloxstraplabs/bloxstrap/wiki/A-deep-dive-on-how-the-Roblox-bootstrapper-works#protocoluri-handling
                 if joinPS:
                     # Parse the provided private server link robustly using url parsing
                     from urllib.parse import urlparse, parse_qs
