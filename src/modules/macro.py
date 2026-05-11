@@ -2269,7 +2269,8 @@ class macro:
 
                     self.setRobloxWindowInfo(setYOffset=False)
 
-            appManager.openApp("Sober")
+            if self.setdat["rejoin_method"] != "deeplink":
+                appManager.openApp("Sober")
             if not rejoinSuccess:
                 continue
             #run fullscreen check
@@ -2295,7 +2296,8 @@ class macro:
                     else:
                         self.keyboard.keyUp("ctrl")
                     time.sleep(0.5)
-                appManager.openApp("Sober")
+                if self.setdat["rejoin_method"] != "deeplink":
+                    appManager.openApp("Sober")
             
             self.startDetect()
             if not claimHive:
