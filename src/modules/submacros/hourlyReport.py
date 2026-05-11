@@ -147,7 +147,7 @@ class BuffDetector():
             templatePosition, transform, stackable = v
 
             #find the buff
-            buffTemplate = adjustImage("./images/buffs", buff, self.robloxWindow.display_type)
+            buffTemplate = adjustImage("./src/images/buffs", buff, self.robloxWindow.display_type)
             finalBuffValues = []
 
             for _ in range(3):
@@ -337,7 +337,7 @@ class BuffDetector():
 
         #find the buff
         screen = self.screenshotBuffArea()
-        buffTemplate = adjustImage("./images/buffs", nectar, self.robloxWindow.display_type)
+        buffTemplate = adjustImage("./src/images/buffs", nectar, self.robloxWindow.display_type)
         res = locateTransparentImage(buffTemplate, screen, 0.5) #get the best match first. At high nectar levels, it becomes hard to detect the nectar icon
         if not res: 
             return 0

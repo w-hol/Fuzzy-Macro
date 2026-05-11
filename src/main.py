@@ -3338,7 +3338,7 @@ if __name__ == "__main__":
             updateGUI.value = 0
         
         if run.value == 2 and time.time() > disconnectCooldownUntil:
-            img = adjustImage("./images/menu", "disconnect", screenInfo["display_type"])
+            img = adjustImage("./src/images/menu", "disconnect", screenInfo["display_type"])
             wmx, wmy, wmw, wmh = getWindowSize("roblox roblox")
             if locateImageOnScreen(img, wmx+wmw/3, wmy+wmh/2.8, wmw/2.3, wmh/5, 0.7):
                 print("disconnected")

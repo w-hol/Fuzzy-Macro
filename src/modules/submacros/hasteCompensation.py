@@ -21,14 +21,14 @@ class HasteCompensation():
 
         self.hasteStacks = []
         for i in range(10):
-            self.hasteStacks.append(self.adjustBuffImage(f"./images/buffs/haste{i+1}.png"))
+            self.hasteStacks.append(self.adjustBuffImage(f"./src/images/buffs/haste{i+1}.png"))
         self.hasteStacks = list(enumerate(self.hasteStacks))[::-1]
 
         self.bearMorphs = []
         for i in range(5):
-            self.bearMorphs.append(self.adjustBuffImage(f"./images/buffs/bearmorph{i+1}-retina.png", grayscale=True))
+            self.bearMorphs.append(self.adjustBuffImage(f"./src/images/buffs/bearmorph{i+1}-retina.png", grayscale=True))
 
-        self.hastePlus = self.adjustBuffImage(f"./images/buffs/haste+.png")                       
+        self.hastePlus = self.adjustBuffImage(f"./src/images/buffs/haste+.png")                       
         self.prevHaste = 0         
         self.prevHaste368 = 0 #tracking the previous haste to accurately determine if the haste stack is 3,6 or 8
         self.hasteEnds = 0
@@ -119,7 +119,7 @@ class HasteCompensationOptimized():
         #load templates
         self.hasteStacks = []
         for i in range(10):
-            img = self._loadTemplate(f"./images/buffs/haste{i+1}.png")
+            img = self._loadTemplate(f"./src/images/buffs/haste{i+1}.png")
             self.hasteStacks.append(img)
         #store as (index, template) pairs
         self.hasteStacks = list(enumerate(self.hasteStacks))[::-1] 
@@ -127,11 +127,11 @@ class HasteCompensationOptimized():
         self.bearMorphs = []
         for i in range(5):
             # Prepare bear morph templates
-            img = self._loadTemplate(f"./images/buffs/bearmorph{i+1}-retina.png")
+            img = self._loadTemplate(f"./src/images/buffs/bearmorph{i+1}-retina.png")
             self.bearMorphs.append(img)
 
         #no gray, haste+ is color-dependent
-        self.hastePlus = self._loadTemplate(f"./images/buffs/haste+.png", gray=False)
+        self.hastePlus = self._loadTemplate(f"./src/images/buffs/haste+.png", gray=False)
 
         self.prevHaste = 0
         self.prevHaste368 = 0
@@ -249,7 +249,7 @@ class HasteCompensationFastest():
         self.hasteStacks = []
         for i in range(10):
             # Load, resize, and convert to grayscale ONCE during initialization
-            img = self._load_and_prepare_template(f"./images/buffs/haste{i+1}.png")
+            img = self._load_and_prepare_template(f"./src/images/buffs/haste{i+1}.png")
             self.hasteStacks.append(img)
         # Store as (index, template) pairs, reversed order is already handled
         self.hasteStacks = list(enumerate(self.hasteStacks))[::-1] 
@@ -257,11 +257,11 @@ class HasteCompensationFastest():
         self.bearMorphs = []
         for i in range(5):
             # Prepare bear morph templates
-            img = self._load_and_prepare_template(f"./images/buffs/bearmorph{i+1}-retina.png")
+            img = self._load_and_prepare_template(f"./src/images/buffs/bearmorph{i+1}-retina.png")
             self.bearMorphs.append(img)
 
         # Prepare haste+ template
-        self.hastePlus = self._load_and_prepare_template(f"./images/buffs/haste+.png")
+        self.hastePlus = self._load_and_prepare_template(f"./src/images/buffs/haste+.png")
 
         self.prevHaste = 0
         self.prevHaste368 = 0 # Tracking previous haste for 3/6/8 ambiguity
@@ -404,9 +404,9 @@ class HasteCompensationRevamped():
                 self.countBitmaps.append(Image.open(f"images/buffs/counts/{i}.png").convert('RGBA'))
 
             for i in range(6):
-                self.bearMorphs.append(Image.open(f"./images/buffs/bearmorph{i+1}-retina.png").convert('RGBA'))
+                self.bearMorphs.append(Image.open(f"./src/images/buffs/bearmorph{i+1}-retina.png").convert('RGBA'))
             
-            self.hastePlus = Image.open("./images/buffs/haste+-retina.png").convert('RGBA')
+            self.hastePlus = Image.open("./src/images/buffs/haste+-retina.png").convert('RGBA')
         else:
             #base64 images taken directly from natro macro
             #https://github.com/NatroTeam/NatroMacro/blob/main/lib/Walk.ahk

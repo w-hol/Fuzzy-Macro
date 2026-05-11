@@ -16,14 +16,14 @@ class Walk():
 
         self.hasteStacks = []
         for i in range(10):
-            self.hasteStacks.append(self.adjustBuffImage(f"./images/buffs/haste{i+1}.png"))
+            self.hasteStacks.append(self.adjustBuffImage(f"./src/images/buffs/haste{i+1}.png"))
         self.hasteStacks = list(enumerate(self.hasteStacks))[::-1]
 
         self.bearMorphs = []
         for i in range(5):
-            self.bearMorphs.append(self.adjustBuffImage(f"./images/buffs/bearmorph{i+1}.png"))
+            self.bearMorphs.append(self.adjustBuffImage(f"./src/images/buffs/bearmorph{i+1}.png"))
 
-        self.hastePlus = self.adjustBuffImage(f"./images/buffs/haste+.png")         
+        self.hastePlus = self.adjustBuffImage(f"./src/images/buffs/haste+.png")         
         self.mw, self.mh = pag.size()                 
         self.prevHaste = 0         
         self.prevHaste368 = 0 #tracking the previous haste to accurately determine if the haste stack is 3,6 or 8

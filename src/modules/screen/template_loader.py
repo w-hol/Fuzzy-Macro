@@ -11,7 +11,7 @@ def _read_image(path):
 @lru_cache(maxsize=256)
 def load_template_for_display(path_without_ext):
     """
-    path_without_ext: full path without the extension suffix, e.g. "./images/menu/honeybar"
+    path_without_ext: full path without the extension suffix, e.g. "./src/images/menu/honeybar"
     Behavior:
       - tries path + f"-{display_type}.png" first (e.g. honeybar-retina.png)
       - else tries path + ".png"

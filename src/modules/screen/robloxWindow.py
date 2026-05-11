@@ -30,7 +30,7 @@ class RobloxWindowBounds:
 
         #calculate y offset and the actual roblox content bounds
         if setYOffset:
-            honeyImg = Image.open(f"./images/menu/honeybar-{self.display_type}.png").convert('RGBA')
+            honeyImg = Image.open(f"./src/images/menu/honeybar-{self.display_type}.png").convert('RGBA')
             screen = mssScreenshotPillowRGBA(self.mx,self.my,self.mw,self.mh//3)
             res = bitmap_matcher.find_bitmap_cython(screen, honeyImg, variance=5)
             if res:
