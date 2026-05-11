@@ -645,7 +645,7 @@ class FinalReport:
         try:
             if setdat.get("planters_mode") == 1:
                 try:
-                    with open("./data/user/manualplanters.txt", "r") as f:
+                    with open("./src/data/user/manualplanters.txt", "r") as f:
                         planterData = f.read()
                     if planterData:
                         planterData = ast.literal_eval(planterData)
@@ -653,7 +653,7 @@ class FinalReport:
                     planterData = ""
             elif setdat.get("planters_mode") == 2:
                 try:
-                    with open("./data/user/auto_planters.json", "r") as f:
+                    with open("./src/data/user/auto_planters.json", "r") as f:
                         planterData = json.load(f)["planters"]
                     planterData = {
                         "planters": [p["planter"] for p in planterData],

@@ -505,14 +505,14 @@ class HourlyReport():
         planterData = ""
         #get planter data
         if setdat["planters_mode"] == 1:
-            with open("./data/user/manualplanters.txt", "r") as f:
+            with open("./src/data/user/manualplanters.txt", "r") as f:
                 planterData = f.read()
             f.close()
 
             if planterData:
                 planterData = ast.literal_eval(planterData)
         elif setdat["planters_mode"] == 2:
-            with open("./data/user/auto_planters.json", "r") as f:
+            with open("./src/data/user/auto_planters.json", "r") as f:
                 planterData = json.load(f)["planters"]
             f.close()
             planterData = {
