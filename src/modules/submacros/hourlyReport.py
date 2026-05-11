@@ -674,7 +674,7 @@ class HourlyReportDrawer:
             self.hour = 23
         else:
             self.hour -= 1
-        self.assetPath = "hourly_report/assets"
+        self.assetPath = "./src/hourly_report/assets"
 
     def transformXLabelTime(self, i, val):
         if i%10:
@@ -732,7 +732,7 @@ class HourlyReportDrawer:
         return ' '.join(result)
         
     def getFont(self, weight, fontSize):
-        return ImageFont.truetype(f"hourly_report/Inter/static/Inter_18pt-{weight.title()}.ttf", fontSize)
+        return ImageFont.truetype(f"./src/hourly_report/Inter/static/Inter_18pt-{weight.title()}.ttf", fontSize)
 
     def getGradientColorAtRatio(self, ratio, gradientSpec):
         #calculates the RGBA color from gradientSpec at a given vertical ratio (0=bottom, 1=top)
