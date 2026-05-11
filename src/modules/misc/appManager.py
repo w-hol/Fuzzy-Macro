@@ -69,7 +69,12 @@ class AppManager:
             print(f"Failed to open deeplink: {e}")
     
     def openApp(self, app="Sober"):
+        import traceback
+        print(f"DEBUG: openApp('{app}') called from:")
+        for line in traceback.format_stack()[:-1]:
+            print(line.strip())
         if self.isAppOpen(app):
+            print("DEBUG: App already open, skipping launch.")
             return True
         try:
             subprocess.Popen(["flatpak", "run", "org.vinegarhq.Sober"])
