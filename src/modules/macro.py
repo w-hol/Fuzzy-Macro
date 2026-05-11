@@ -329,7 +329,7 @@ quest_bear = ""
 quest_title = ""
 quest_info = []
 
-with open("./data/bss/quest_data.txt", "r") as f:
+with open("./src/data/bss/quest_data.txt", "r") as f:
     qdata = [x for x in f.read().split("\n") if x]
 
 for line in qdata:
