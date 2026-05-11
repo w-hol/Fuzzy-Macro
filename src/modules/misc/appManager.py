@@ -3,7 +3,11 @@ import subprocess
 class AppManager:
     def isAppOpen(self, app="Sober"):
         try:
-            # Check if flatpak lists it as running
+            # Check for window existence first (more reliable for UI apps)
+            out = subprocess.check_output(["wmctrl", "-l"], stderr=subprocess.DEVNULL).decode()
+            if "Sober" in out:
+                return True
+            # Fallback to process check
             out = subprocess.check_output(["flatpak", "ps"], stderr=subprocess.DEVNULL).decode()
             return "org.vinegarhq.Sober" in out
         except:
@@ -55,6 +59,25 @@ class AppManager:
         else:
             subprocess.call(["wmctrl", "-r", "Sober", "-b", "remove,fullscreen"])
 
+    def openDeeplink(self, deeplink):
+        try:
+            # Use shell=True and quote the deeplink to match terminal behavior
+            cmd = f"xdg-open '{deeplink}'"
+            print(f"Executing deeplink: {cmd}")
+            subprocess.Popen(cmd, shell=True)
+        except Exception as e:
+            print(f"Failed to open deeplink: {e}")
+    
+    def openApp(self, app="Sober"):
+        if self.isAppOpen(app):
+            return True
+        try:
+            subprocess.Popen(["flatpak", "run", "org.vinegarhq.Sober"])
+            return True
+        except Exception as e:
+            print(f"Failed to open app: {e}")
+            return False
+            
 # Single instance
 manager = AppManager()
 
@@ -66,4 +89,5 @@ forceQuitApp = manager.forceQuitApp
 getWindowSize = manager.getWindowSize
 maximiseAppWindow = manager.maximiseAppWindow
 setAppFullscreen = manager.setAppFullscreen
-openApp = lambda app: False
+openDeeplink = manager.openDeeplink
+openApp = manager.openApp

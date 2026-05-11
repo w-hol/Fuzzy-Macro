@@ -2019,7 +2019,7 @@ class macro:
     def cannon(self, fast = False, allowHiveResync = True):
         def detect_rejoin_mode_color():
             try:
-                if not appManager.isAppFocused("Roblox"):
+                if not appManager.isAppFocused("Sober"):
                     return None
                 percent_threshold = float(self.setdat.get("rejoin_color_percent", 0.7754))
                 color_tolerance = int(self.setdat.get("rejoin_color_tolerance", 40))
@@ -2162,12 +2162,13 @@ class macro:
                 browserLink = psLink
             if rejoinMethod == "deeplink":
                 try:
-                    appManager.forceCloseApp("Roblox")
+                    appManager.forceQuitApp("Sober")
                 except Exception:
-                    appManager.closeApp("Roblox")
-                appManager.openApp("Roblox")
+                    appManager.closeApp("Sober")
+                # appManager.openApp("Sober")
                 time.sleep(2)
-                deeplink = f"roblox://placeID={placeId}"
+                deeplink = f"roblox://experiences/start?placeId={placeId}"
+                # https://github.com/bloxstraplabs/bloxstrap/wiki/A-deep-dive-on-how-the-Roblox-bootstrapper-works#protocoluri-handling
                 if joinPS:
                     # Parse the provided private server link robustly using url parsing
                     from urllib.parse import urlparse, parse_qs
@@ -2196,7 +2197,7 @@ class macro:
                         else:
                             if is_share:
                                 type_val = qs.get('type', ['Server'])[0]
-                                deeplink = f"roblox://navigation/share_links?code={code_val}&type={type_val}"
+                                deeplink = f"roblox://experiences/start?placeId={placeId}&linkCode={code_val}"
                             else:
                                 deeplink += f"&linkCode={code_val}"
                     except Exception as e:
@@ -2236,7 +2237,7 @@ class macro:
             rejoinSuccess = True
             robloxOpenTime = 0
             while not locateImageOnScreen(sprinklerImg, self.robloxWindow.mx, self.robloxWindow.my+(self.robloxWindow.mh*3/4), self.robloxWindow.mw, self.robloxWindow.mh*1/4, 0.75) and time.time() - loadStartTime < 240:
-                if appManager.isAppOpen("roblox"):
+                if appManager.isAppOpen("Sober"):
                     robloxOpenTime = time.time()
                 if self.setdat["rejoin_method"] == "deeplink":
                     #check if the user is stuck on the sign up screen
@@ -2257,7 +2258,7 @@ class macro:
 
                 # Check for sustained dominant color (light/dark) that indicates a stuck screen.
                 try:
-                    if appManager.isAppFocused("Roblox"):
+                    if appManager.isAppFocused("Sober"):
                         matched = False
                         for col in sample_colors:
                             pct = percent_pixels_similar_to_color(self.robloxWindow.mx, self.robloxWindow.my, self.robloxWindow.mw, self.robloxWindow.mh, col, tolerance=color_tolerance)
@@ -2280,7 +2281,8 @@ class macro:
 
                     self.setRobloxWindowInfo(setYOffset=False)
 
-            appManager.openApp("Roblox")
+            if self.setdat["rejoin_method"] != "deeplink":
+                appManager.openApp("Sober")
             if not rejoinSuccess:
                 continue
             #run fullscreen check
@@ -2306,7 +2308,8 @@ class macro:
                     else:
                         self.keyboard.keyUp("ctrl")
                     time.sleep(0.5)
-                appManager.openApp("Roblox")
+                if self.setdat["rejoin_method"] != "deeplink":
+                    appManager.openApp("Sober")
             
             self.startDetect()
             if not claimHive:
@@ -6975,8 +6978,14 @@ class macro:
         if extrema == (0, 0):
             messageBox.msgBox(text='It seems like you have not enabled roblox scaling. The macro will not work properly.\n1. Close Roblox\n2. Go to finder -> applications -> right click roblox -> get info -> enable "scale to fit below built-in camera"', title='Roblox scaling')
         #make sure game mode is disabled (macOS 14.0 and above and apple chips)
-        macVersion, _, _ = platform.mac_ver()
-        macVersion = float('.'.join(macVersion.split('.')[:2]))
+        mac_ver_info = platform.mac_ver()[0]
+        if mac_ver_info:
+            try:
+                macVersion = float('.'.join(mac_ver_info.split('.')[:2]))
+            except ValueError:
+                macVersion = 0.0
+        else:
+            macVersion = 0.0
 
         # Removed lines that were un-fullscreening Roblox on startup
         # appManager.setAppFullscreen(fullscreen=False)
@@ -7044,13 +7053,18 @@ class macro:
             hourlyReportBackgroundThread.start()
         
         #if roblox is not open, rejoin
-        if not appManager.openApp("Roblox"):
-            self.rejoin()
+        if self.setdat.get("rejoin_method") != "deeplink":
+            if not appManager.openApp("Sober"):
+                self.rejoin()
+            else:
+                #toggle fullscreen
+                # if not self.isFullScreen():
+                #     self.toggleFullScreen()
+                self.startDetect()
         else:
-            #toggle fullscreen
-            # if not self.isFullScreen():
-            #     self.toggleFullScreen()
-            self.startDetect()
+            # If using deeplink, we expect the user/macro to trigger rejoin() explicitly later
+            # Or if we want to ensure it's open, just check it.
+            self.rejoin()
             self.setRobloxWindowInfo()
     
         if not benchmarkMSS():

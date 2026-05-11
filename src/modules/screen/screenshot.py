@@ -80,7 +80,7 @@ def mssScreenshot(x=0,y=0,w=mw,h=mh, save = False, filename=None):
             return img
 
 def screenshotRobloxWindow(filename = None, regionMultipliers = None):
-    res = getWindowSize("roblox roblox")
+    res = getWindowSize("Sober")
     if res:
         x,y,w,h = res
     else:
