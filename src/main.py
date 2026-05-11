@@ -2944,27 +2944,30 @@ if __name__ == "__main__":
     except Exception as e:
         pass
     
-    #check screen recording permissions
-    try:
-        cg = ctypes.cdll.LoadLibrary("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")
-        cg.CGRequestScreenCaptureAccess.restype = ctypes.c_bool
-        if not cg.CGRequestScreenCaptureAccess():
-            messageBox.msgBox(title="Screen Recording Permission", text='Terminal does not have the screen recording permission. The macro will not work properly.\n\nTo fix it, go to System Settings -> Privacy and Security -> Screen Recording -> add and enable Terminal. After that, restart the macro')
-    except AttributeError:
-        pass
-    #check full keyboard access
-    try:
-        result = subprocess.run(
-            ["defaults", "read", "com.apple.universalaccess", "KeyboardAccessEnabled"],
-            capture_output=True,
-            text=True
-        )
-        value = result.stdout.strip()
-        if value == "1":
-            messageBox.msgBox(text = f"Full Keyboard Access is enabled. The macro will not work properly\
-                \nTo disable it, go to System Settings -> Accessibility -> Keyboard -> uncheck 'Full Keyboard Access'")
-    except Exception as e:
-        print("Error reading Full Keyboard Access:", e)
+    # Check system permissions (macOS only)
+    if sys.platform == 'darwin':
+        #check screen recording permissions
+        try:
+            cg = ctypes.cdll.LoadLibrary("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")
+            cg.CGRequestScreenCaptureAccess.restype = ctypes.c_bool
+            if not cg.CGRequestScreenCaptureAccess():
+                messageBox.msgBox(title="Screen Recording Permission", text='Terminal does not have the screen recording permission. The macro will not work properly.\n\nTo fix it, go to System Settings -> Privacy and Security -> Screen Recording -> add and enable Terminal. After that, restart the macro')
+        except AttributeError:
+            pass
+        #check full keyboard access
+        try:
+            result = subprocess.run(
+                ["defaults", "read", "com.apple.universalaccess", "KeyboardAccessEnabled"],
+                capture_output=True,
+                text=True
+            )
+            value = result.stdout.strip()
+            if value == "1":
+                messageBox.msgBox(text = f"Full Keyboard Access is enabled. The macro will not work properly\
+                    \nTo disable it, go to System Settings -> Accessibility -> Keyboard -> uncheck 'Full Keyboard Access'")
+        except Exception as e:
+            print("Error reading Full Keyboard Access:", e)
+
 
     discordBotProc = None
     prevDiscordBotToken = None
