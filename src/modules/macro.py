@@ -360,7 +360,7 @@ nectarFields = {
   "invigorating": ["pepper", "mountain top", "clover", "cactus"]
 }
 allPlanters = ["paper", "ticket", "festive", "sticker", "plastic", "candy", "red_clay", "blue_clay", "tacky", "pesticide", "heat-treated", "hydroponic", "petal", "planter_of_plenty"]
-with open("./data/bss/auto_planter_ranking.json", "r") as f:
+with open("./src/data/bss/auto_planter_ranking.json", "r") as f:
     autoPlanterRankings = json.load(f)
 
 
